@@ -8,6 +8,7 @@ import subprocess
 import sys
 import threading
 import time
+from contextlib import asynccontextmanager
 
 import psutil
 import uvicorn
@@ -138,13 +139,13 @@ def collect() -> dict:
     }
 
 
-app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
-
-
-@app.on_event("startup")
-def _warmup():
+@asynccontextmanager
+async def lifespan(app):
     collect()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 
 @app.get("/api/data")
@@ -154,7 +155,15 @@ async def data():
 
 dist = CONFIG_DIR / "dist"
 if dist.exists():
-    app.mount("/", StaticFiles(directory=str(dist), html=True), name="static")
+    app.mount("/assets", StaticFiles(directory=str(dist / "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def spa(full_path: str):
+        p = dist / full_path
+        if p.is_file():
+            from fastapi.responses import FileResponse
+            return FileResponse(p)
+        return FileResponse(dist / "index.html")
 
 
 if __name__ == "__main__":
