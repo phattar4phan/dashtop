@@ -31,20 +31,9 @@ else
 fi
 
 echo
-echo "Host this app locally or remotely?"
-echo "  1) localhost"
-echo "  2) remote"
-read -rp "Choose [1]: " mode
-mode="${mode:-1}"
-
-if [ "$mode" = "2" ]; then
-    read -rp "URL/IP to bind: " HOST
-    read -rp "Port: " PORT
-else
-    read -rp "Port [5173]: " PORT
-    PORT="${PORT:-5173}"
-    HOST="127.0.0.1"
-fi
+read -rp "Port [8765]: " PORT </dev/tty
+PORT="${PORT:-8765}"
+HOST="127.0.0.1"
 
 DASHTOP_DIR="$HOME/.dashtop"
 mkdir -p "$DASHTOP_DIR"
@@ -56,23 +45,14 @@ cat > "$DASHTOP_DIR/settings.json" <<EOF
 }
 EOF
 
-if [ "$HOST" = "127.0.0.1" ] || [ "$HOST" = "localhost" ]; then
-    if [ ! -d web/node_modules ]; then
-        echo "Installing web dependencies..."
-        (cd web && npm install --silent)
-    fi
-    echo "Building web dashboard..."
-    (cd web && npm run build --silent)
-    rm -rf "$DASHTOP_DIR/dist"
-    cp -r web/dist "$DASHTOP_DIR/dist"
-    cat > "$DASHTOP_DIR/dist/package.json" <<PKG
-{
-    "scripts": {
-        "dev": "npx vite preview --port $PORT --host"
-    }
-}
-PKG
+if [ ! -d web/node_modules ]; then
+    echo "Installing web dependencies..."
+    (cd web && npm install --silent)
 fi
+echo "Building web dashboard..."
+(cd web && npm run build --silent)
+rm -rf "$DASHTOP_DIR/dist"
+cp -r web/dist "$DASHTOP_DIR/dist"
 
 echo "Installing systemd user service..."
 SERVICE_DIR="$HOME/.config/systemd/user"
@@ -90,4 +70,4 @@ echo
 echo -e "${GREEN}Done.${NC}"
 echo "Config: $DASHTOP_DIR/settings.json"
 echo "Status: systemctl --user status dashtop"
-echo "Run: cd $DASHTOP_DIR/dist && npm run dev"
+echo "Dashboard: http://$HOST:$PORT/dashboard"
