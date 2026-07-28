@@ -32,21 +32,19 @@ fi
 
 echo
 echo "Host this app locally or remotely?"
-select mode in "localhost" "remote"; do
-    case $mode in
-        localhost)
-            read -rp "Port [5173]: " PORT
-            PORT="${PORT:-5173}"
-            HOST="127.0.0.1"
-            break
-            ;;
-        remote)
-            read -rp "URL/IP to bind: " HOST
-            read -rp "Port: " PORT
-            break
-            ;;
-    esac
-done
+echo "  1) localhost"
+echo "  2) remote"
+read -rp "Choose [1]: " mode
+mode="${mode:-1}"
+
+if [ "$mode" = "2" ]; then
+    read -rp "URL/IP to bind: " HOST
+    read -rp "Port: " PORT
+else
+    read -rp "Port [5173]: " PORT
+    PORT="${PORT:-5173}"
+    HOST="127.0.0.1"
+fi
 
 DASHTOP_DIR="$HOME/.dashtop"
 mkdir -p "$DASHTOP_DIR"
