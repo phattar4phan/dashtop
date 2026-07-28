@@ -69,7 +69,7 @@ loginctl enable-linger "$USER" 2>/dev/null || true
 echo
 echo "Waiting for daemon..."
 sleep 8
-TUNNEL=$(cat "$DASHTOP_DIR/tunnel_url" 2>/dev/null)
+TUNNEL=$(cat "$DASHTOP_DIR/tunnel_url" 2>/dev/null || true)
 
 cat > "$DASHTOP_DIR/url.sh" <<'EOF'
 #!/usr/bin/env bash
