@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, Github, Users } from "lucide-react";
+import { Github, Users } from "lucide-react";
 
 const Btn = ({ href, children, primary }: { href: string; children: React.ReactNode; primary?: boolean }) => (
   <motion.a
@@ -41,17 +41,15 @@ export default function Community() {
           className="glass rounded-3xl p-8 sm:p-12 border border-dt-border/40 max-w-3xl mx-auto text-center"
         >
           <div className="w-16 h-16 rounded-2xl bg-dt-accent/10 flex items-center justify-center text-dt-accent mx-auto mb-6">
-            <Heart className="w-8 h-8" />
+            <Github className="w-8 h-8" />
           </div>
-          <h3 className="text-2xl font-bold tracking-tight mb-4">Support the Project</h3>
+          <h3 className="text-2xl font-bold tracking-tight mb-4">Open Source</h3>
           <p className="text-dt-muted leading-relaxed max-w-md mx-auto mb-8">
-            Dashtop is a passion project built for the community. While the application will always remain free and open source, voluntary donations help fund ongoing development —{" "}
-            <em>it{"'"}s optional</em>.
+            Dashtop is and always will be free and open source. Star the repo, submit a PR, or open an issue — every contribution helps.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Btn href="#" primary><Heart className="w-4 h-4" />Donate</Btn>
-            <Btn href="https://github.com"><Github className="w-4 h-4" />Star on GitHub</Btn>
-            <Btn href="https://github.com"><Users className="w-4 h-4" />Contribute</Btn>
+            <Btn href="https://github.com/phattar4phan/dashtop" primary><Github className="w-4 h-4" />Star on GitHub</Btn>
+            <Btn href="https://github.com/phattar4phan/dashtop"><Users className="w-4 h-4" />Contribute</Btn>
           </div>
         </motion.div>
       </div>

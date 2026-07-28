@@ -2,9 +2,8 @@ import { motion } from "framer-motion";
 import { Download as DownloadIcon, Github, BookOpen, Terminal } from "lucide-react";
 
 const CMDS = [
-  { label: "curl", cmd: "curl -fsSL https://install.dashtop.dev | sh" },
-  { label: "wget", cmd: "wget -qO- https://install.dashtop.dev | sh" },
-  { label: "pip", cmd: "pip install dashtop && dashtop --serve" },
+  { label: "curl", cmd: "curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh" },
+  { label: "wget", cmd: "wget -qO- https://dashtop.phattar4phan.workers.app/install.sh | sh" },
 ];
 
 const Btn = ({ href, children, primary }: { href: string; children: React.ReactNode; primary?: boolean }) => (
@@ -70,8 +69,8 @@ export default function Download() {
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
             <Btn href="#" primary><DownloadIcon className="w-4 h-4" />Download Latest</Btn>
-            <Btn href="https://github.com"><Github className="w-4 h-4" />GitHub</Btn>
-            <Btn href="#"><BookOpen className="w-4 h-4" />Documentation</Btn>
+            <Btn href="https://github.com/phattar4phan/dashtop"><Github className="w-4 h-4" />GitHub</Btn>
+            <Btn href="https://github.com/phattar4phan/dashtop/blob/main/README.md"><BookOpen className="w-4 h-4" />Documentation</Btn>
           </div>
         </motion.div>
       </div>

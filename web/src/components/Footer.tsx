@@ -1,19 +1,18 @@
-import { Monitor, Github, BookOpen, Download, ExternalLink, Heart } from "lucide-react";
+import { Monitor, Github, BookOpen, Download, ExternalLink } from "lucide-react";
 
 const LINKS = [
   {
     title: "Product",
     items: [
       { label: "Download", href: "#download", icon: <Download className="w-3.5 h-3.5" /> },
-      { label: "Documentation", href: "#", icon: <BookOpen className="w-3.5 h-3.5" /> },
-      { label: "Demo Dashboard", href: "https://demo.dashtop.dev", icon: <ExternalLink className="w-3.5 h-3.5" /> },
+      { label: "Documentation", href: "https://github.com/phattar4phan/dashtop/blob/main/README.md", icon: <BookOpen className="w-3.5 h-3.5" /> },
+      { label: "Demo Dashboard", href: "https://dashtop.phattar4phan.workers.app", icon: <ExternalLink className="w-3.5 h-3.5" /> },
     ],
   },
   {
     title: "Community",
     items: [
-      { label: "GitHub", href: "https://github.com", icon: <Github className="w-3.5 h-3.5" /> },
-      { label: "Donate", href: "#", icon: <Heart className="w-3.5 h-3.5" /> },
+      { label: "GitHub", href: "https://github.com/phattar4phan/dashtop", icon: <Github className="w-3.5 h-3.5" /> },
     ],
   },
 ];
@@ -58,8 +57,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Dashtop. Open source under the MIT License.
           </p>
           <div className="flex items-center gap-4">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">GitHub</a>
-            <a href="#" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Documentation</a>
+            <a href="https://github.com/phattar4phan/dashtop" target="_blank" rel="noopener noreferrer" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">GitHub</a>
+            <a href="https://github.com/phattar4phan/dashtop/blob/main/README.md" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Documentation</a>
             <a href="#download" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Download</a>
           </div>
         </div>

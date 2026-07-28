@@ -56,7 +56,7 @@ export default function Navbar() {
             Dashboard
           </Link>
           <a
-            href="https://github.com"
+            href="https://github.com/phattar4phan/dashtop"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-dt-muted hover:text-dt-text transition-colors"
@@ -107,7 +107,7 @@ export default function Navbar() {
                 Dashboard
               </Link>
               <a
-                href="https://github.com"
+                href="https://github.com/phattar4phan/dashtop"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={mobileLinkClass}

@@ -13,7 +13,7 @@ Real-time hardware monitoring dashboard for the modern web.
 ## Install
 
 ```bash
-curl -fsSL https://install.dashtop.dev | sh
+curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh
 ```
 
 Installer prompts for localhost or remote host, installs Python + web deps, builds dashboard, creates systemd service.

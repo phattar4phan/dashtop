@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Download, BookOpen, Heart, ExternalLink, Check } from "lucide-react";
+import { Download, BookOpen, ExternalLink, Check } from "lucide-react";
 
 const btnBase =
   "inline-flex items-center gap-2 px-6 py-3 glass rounded-xl text-sm font-medium text-dt-text hover:border-dt-accent/50 transition-colors";
@@ -51,13 +51,9 @@ export default function Hero() {
               <Download className="w-4 h-4" />
               Download
             </motion.a>
-            <motion.a href="#" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className={btnBase}>
+            <motion.a href="https://github.com/phattar4phan/dashtop/blob/main/README.md" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className={btnBase}>
               <BookOpen className="w-4 h-4" />
               Documentation
-            </motion.a>
-            <motion.a href="#" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className={btnBase}>
-              <Heart className="w-4 h-4" />
-              Donate
             </motion.a>
           </div>
 
@@ -78,7 +74,7 @@ export default function Hero() {
                 <div>
                   <span className="text-dt-accent">$ </span>
                   <span className="text-dt-text">
-                    curl -fsSL https://install.dashtop.dev | sh
+                    curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh
                   </span>
                 </div>
                 <div className="text-dt-muted/60 text-xs leading-relaxed">
@@ -99,14 +95,14 @@ export default function Hero() {
             </div>
 
             <motion.a
-              href="https://demo.dashtop.dev"
+              href="https://dashtop.phattar4phan.workers.app"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02 }}
               className="mt-4 inline-flex items-center gap-1.5 text-sm text-dt-accent hover:text-dt-accent/80 transition-colors font-medium"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              View live demo at demo.dashtop.dev
+              View live demo at dashtop.phattar4phan.workers.app
             </motion.a>
           </motion.div>
         </motion.div>
