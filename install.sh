@@ -5,9 +5,6 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 REPO="https://github.com/phattar4phan/dashtop.git"
 
-echo -e "${GREEN}Dashtop Installer${NC}"
-echo
-
 if [ -f pyproject.toml ] && [ -d web ] && [ -d src ]; then
     SCRIPT_DIR="$(pwd)"
 else
