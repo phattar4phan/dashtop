@@ -14,6 +14,7 @@ import psutil
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from .utils.cpu import GetCPUData
@@ -161,7 +162,6 @@ if dist.exists():
     async def spa(full_path: str):
         p = dist / full_path
         if p.is_file():
-            from fastapi.responses import FileResponse
             return FileResponse(p)
         return FileResponse(dist / "index.html")
 
