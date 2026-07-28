@@ -13,11 +13,9 @@ def GetDiskIOData(interval: float) -> dict:
     disk_speed_read = (disk_second_snapshot.read_bytes - disk_first_snapshot.read_bytes / (1024 ** 2)) / interval
     disk_speed_write = (disk_second_snapshot.write_bytes - disk_first_snapshot.write_bytes / (1024 ** 2)) / interval
     
-    return {
+    result = {
         'read_speed': disk_speed_read,
         'write_speed': disk_speed_write
     }
     
-diskio = GetDiskIOData(1.0)
-print(f'Read: {diskio['read_speed']:.2f} MB/s')
-print(f'Write: {diskio['write_speed']:.2f} MB/s')
+    return result

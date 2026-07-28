@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #464545 transparent;
+  }
+
+  ::selection {
+    background-color: rgba(0, 172, 172, 0.3);
+    color: #dfdedc;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(70, 69, 69, 0.3);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(70, 69, 69, 0.5);
+  }
+
+  .glass-light {
+    background: rgba(70, 69, 69, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(70, 69, 69, 0.3);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #dfdedc 0%, #a6a7a2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .accent-glow {
+    box-shadow: 0 0 30px rgba(0, 172, 172, 0.15), 0 0 60px rgba(0, 172, 172, 0.05);
+  }
+
+  .terminal-line::before {
+    content: "$ ";
+    color: #00acac;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(0, 172, 172, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(0, 172, 172, 0.4);
+    }
+  }
+}
