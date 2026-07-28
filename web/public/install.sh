@@ -67,7 +67,23 @@ systemctl --user enable --now dashtop
 loginctl enable-linger "$USER" 2>/dev/null || true
 
 echo
+echo "Waiting for daemon..."
+sleep 8
+TUNNEL=$(cat "$DASHTOP_DIR/tunnel_url" 2>/dev/null)
+
+cat > "$DASHTOP_DIR/url.sh" <<'EOF'
+#!/usr/bin/env bash
+cat "$HOME/.dashtop/tunnel_url" 2>/dev/null || echo "No tunnel. Run: systemctl --user restart dashtop"
+EOF
+chmod +x "$DASHTOP_DIR/url.sh"
+
+echo
 echo -e "${GREEN}Done.${NC}"
 echo "Config: $DASHTOP_DIR/settings.json"
 echo "Status: systemctl --user status dashtop"
-echo "Dashboard: http://$HOST:$PORT/dashboard"
+if [ -n "$TUNNEL" ]; then
+    echo "Remote:  $TUNNEL"
+else
+    echo "Local:   http://$HOST:$PORT/dashboard"
+fi
+echo "Get URL: ~/.dashtop/url.sh"

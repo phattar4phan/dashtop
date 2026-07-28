@@ -181,7 +181,9 @@ if __name__ == "__main__":
         for line in proc.stdout:
             m = url_pattern.search(line)
             if m:
-                print(f"tunnel: {m.group()}/dashboard")
+                url = f"{m.group()}/dashboard"
+                (CONFIG_DIR / "tunnel_url").write_text(url)
+                print(f"tunnel: {url}")
                 break
 
     print(f"local:  http://{host}:{port}/dashboard")
