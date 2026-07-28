@@ -13,7 +13,8 @@ import MiniLineChart from "../components/MiniLineChart";
 const HISTORY = 30;
 function wsUrl() {
   if (typeof window === "undefined") return "ws://127.0.0.1:8765";
-  return `ws://${window.location.hostname}:8765`;
+  const proto = window.location.protocol === "https:" ? "wss" : "ws";
+  return `${proto}://${window.location.hostname}:8765`;
 }
 
 type Data = {
