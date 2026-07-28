@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -11,11 +11,6 @@ import CircularProgress from "../components/CircularProgress";
 import MiniLineChart from "../components/MiniLineChart";
 
 const HISTORY = 30;
-function wsUrl() {
-  if (typeof window === "undefined") return "ws://127.0.0.1:8765";
-  const proto = window.location.protocol === "https:" ? "wss" : "ws";
-  return `${proto}://${window.location.hostname}:8765`;
-}
 
 type Data = {
   gpuUtil: number; vramUtil: number; vramUsed: number; vramTotal: number; gpuTemp: number;
@@ -39,6 +34,14 @@ const ZERO_DATA: Data = {
   cpuUtil: 0, cpuFreq: 0, perCore: [], cores: 0, threads: 0, cpuTemp: 0,
   diskRead: 0, diskWrite: 0, netRecv: 0, netSend: 0, sensors: {},
 };
+
+function apiUrl() {
+  if (typeof window === "undefined") return "/api/data";
+  const p = new URLSearchParams(window.location.search);
+  const q = p.get("api");
+  if (q) return q + "/api/data";
+  return "/api/data";
+}
 
 function mapLive(raw: Record<string, unknown>): Data {
   const sensors: Record<string, number> = {};
@@ -82,36 +85,31 @@ export default function Dashboard() {
   const [ever, setEver] = useState(false);
   const [data, setData] = useState<Data>(ZERO_DATA);
   const [history, setHistory] = useState<Hist>(ZERO_HIST);
-  const pushRef = useRef<(d: Data) => void>(() => {});
-
-  pushRef.current = useCallback((d: Data) => {
-    setHistory((p) => histPush(p, d));
-  }, []);
 
   useEffect(() => {
-    let ws: WebSocket | null = null;
-    let retry: ReturnType<typeof setTimeout> | null = null;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let failCount = 0;
 
-    const connect = () => {
-      const s = new WebSocket(wsUrl());
-      ws = s;
-      s.onopen = () => { setConnected(true); setEver(true); };
-      s.onmessage = (e) => {
-        try {
-          const d = mapLive(JSON.parse(e.data));
-          setData(d);
-          pushRef.current(d);
-        } catch { /* skip */ }
-      };
-      s.onclose = () => { setConnected(false); ws = null; retry = setTimeout(connect, 3000); };
-      s.onerror = () => s.close();
+    const poll = async () => {
+      try {
+        const res = await fetch(apiUrl());
+        if (!res.ok) throw new Error("fail");
+        const raw = await res.json();
+        const d = mapLive(raw);
+        setData(d);
+        setHistory((p) => histPush(p, d));
+        setConnected(true);
+        setEver(true);
+        failCount = 0;
+      } catch {
+        failCount++;
+        if (failCount >= 3) setConnected(false);
+      }
     };
 
-    connect();
-    return () => {
-      if (ws) { ws.onclose = null; ws.close(); }
-      if (retry) clearTimeout(retry);
-    };
+    poll();
+    timer = setInterval(poll, 2000);
+    return () => { if (timer) clearInterval(timer); };
   }, []);
 
   const status = connected
@@ -205,20 +203,18 @@ export default function Dashboard() {
             <div className="glass-light rounded-2xl p-5">
               <Section icon={<HardDrive className="w-4 h-4" />} label="Disk I/O" />
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Read</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.diskRead} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Write</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.diskWrite} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
+                {(["Read", "Write"] as const).map((label, i) => {
+                  const v = i === 0 ? data.diskRead : data.diskWrite;
+                  return (
+                    <div key={label}>
+                      <span className="text-[10px] text-dt-muted uppercase tracking-wider">{label}</span>
+                      <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
+                        <NumberFlow value={v} locales="en-US" format={FMT_2D} />
+                        <span className="text-xs text-dt-muted">MB/s</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               <MiniLineChart data={history.diskRead} width={340} height={60} />
               <MiniLineChart data={history.diskWrite} width={340} height={60} color="#A6A7A2" />
@@ -226,20 +222,18 @@ export default function Dashboard() {
             <div className="glass-light rounded-2xl p-5">
               <Section icon={<Wifi className="w-4 h-4" />} label="Network" />
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Receive</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.netRecv} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Send</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.netSend} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
+                {(["Receive", "Send"] as const).map((label, i) => {
+                  const v = i === 0 ? data.netRecv : data.netSend;
+                  return (
+                    <div key={label}>
+                      <span className="text-[10px] text-dt-muted uppercase tracking-wider">{label}</span>
+                      <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
+                        <NumberFlow value={v} locales="en-US" format={FMT_2D} />
+                        <span className="text-xs text-dt-muted">MB/s</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               <MiniLineChart data={history.netRecv} width={340} height={60} />
               <MiniLineChart data={history.netSend} width={340} height={60} color="#A6A7A2" />
