@@ -18,6 +18,21 @@ curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh
 
 Installer prompts for localhost or remote host, installs Python + web deps, builds dashboard, creates systemd service.
 
+If could not resolve or install via cURL, run these commands in order:
+```bash
+git clone https://github.com/phattar4phan/dashtop
+cd dashtop
+bash ./web/public/install.sh
+systemctl --user status dashtop
+```
+
+Then answer the prompt and then:
+```bash
+cd
+cd ~/.dashtop/dist/
+npm run dev
+```
+
 ## Usage
 
 Daemon runs automatically via systemd. Start the web dashboard:

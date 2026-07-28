@@ -3,11 +3,24 @@ set -e
 
 GREEN='\033[0;32m'
 NC='\033[0m'
+REPO="https://github.com/phattar4phan/dashtop.git"
 
 echo -e "${GREEN}Dashtop Installer${NC}"
 echo
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f pyproject.toml ] && [ -d web ] && [ -d src ]; then
+    SCRIPT_DIR="$(pwd)"
+else
+    SCRIPT_DIR="$HOME/dashtop"
+    if [ -d "$SCRIPT_DIR" ]; then
+        echo "Updating existing repo..."
+        (cd "$SCRIPT_DIR" && git pull --ff-only)
+    else
+        echo "Cloning $REPO..."
+        git clone "$REPO" "$SCRIPT_DIR"
+    fi
+fi
+
 cd "$SCRIPT_DIR"
 
 echo "Installing Python dependencies..."
@@ -55,6 +68,7 @@ if [ "$HOST" = "127.0.0.1" ] || [ "$HOST" = "localhost" ]; then
     fi
     echo "Building web dashboard..."
     (cd web && npm run build --silent)
+    rm -rf "$DASHTOP_DIR/dist"
     cp -r web/dist "$DASHTOP_DIR/dist"
     cat > "$DASHTOP_DIR/dist/package.json" <<PKG
 {
@@ -64,8 +78,6 @@ if [ "$HOST" = "127.0.0.1" ] || [ "$HOST" = "localhost" ]; then
 }
 PKG
 fi
-
-chmod +x "$SCRIPT_DIR/install.sh"
 
 echo "Installing systemd user service..."
 SERVICE_DIR="$HOME/.config/systemd/user"
@@ -78,8 +90,6 @@ sed "s|__WORKDIR__|$SCRIPT_DIR|g; s|__UV__|$UV_PATH|g" \
 systemctl --user daemon-reload
 systemctl --user enable --now dashtop
 loginctl enable-linger "$USER" 2>/dev/null || true
-echo "  status: systemctl --user status dashtop"
-echo "  logs:   journalctl --user -u dashtop -f"
 
 echo
 echo -e "${GREEN}Done.${NC}"

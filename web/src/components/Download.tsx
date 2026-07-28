@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Download as DownloadIcon, Github, BookOpen, Terminal } from "lucide-react";
 
 const CMDS = [
-  { label: "curl", cmd: "curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh" },
-  { label: "wget", cmd: "wget -qO- https://dashtop.phattar4phan.workers.app/install.sh | sh" },
+  { label: "curl", cmd: "curl -fsSL https://dashtop.phattar4phan.workers.dev/install.sh | sh" },
+  { label: "wget", cmd: "wget -qO- https://dashtop.phattar4phan.workers.dev/install.sh | sh" },
 ];
 
 const Btn = ({ href, children, primary }: { href: string; children: React.ReactNode; primary?: boolean }) => (

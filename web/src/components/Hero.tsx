@@ -74,7 +74,7 @@ export default function Hero() {
                 <div>
                   <span className="text-dt-accent">$ </span>
                   <span className="text-dt-text">
-                    curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh
+                    curl -fsSL https://dashtop.phattar4phan.workers.dev/install.sh | sh
                   </span>
                 </div>
                 <div className="text-dt-muted/60 text-xs leading-relaxed">
