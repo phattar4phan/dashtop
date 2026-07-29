@@ -1,4 +1,4 @@
-import { Monitor, Github, BookOpen, Download, ExternalLink } from "lucide-react";
+import { Github, BookOpen, Download } from "lucide-react";
 
 const LINKS = [
   {
@@ -6,7 +6,6 @@ const LINKS = [
     items: [
       { label: "Download", href: "#download", icon: <Download className="w-3.5 h-3.5" /> },
       { label: "Documentation", href: "https://github.com/phattar4phan/dashtop/blob/main/README.md", icon: <BookOpen className="w-3.5 h-3.5" /> },
-      { label: "Demo Dashboard", href: "https://dashtop.phattar4phan.workers.app", icon: <ExternalLink className="w-3.5 h-3.5" /> },
     ],
   },
   {
@@ -24,7 +23,7 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <Monitor className="w-5 h-5 text-dt-accent" />
+              <img src="/default.svg" alt="" className="w-6 h-6" />
               <span className="font-bold text-dt-text text-lg">Dashtop</span>
             </div>
             <p className="text-sm text-dt-muted leading-relaxed max-w-xs">

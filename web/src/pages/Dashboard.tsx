@@ -71,15 +71,6 @@ function histPush(prev: Hist, d: Data): Hist {
 
 const FMT_2D = { minimumFractionDigits: 2, maximumFractionDigits: 2 } as const;
 
-function Section({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="flex items-center gap-2 mb-4">
-      <span className="text-dt-accent">{icon}</span>
-      <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">{label}</h3>
-    </div>
-  );
-}
-
 export default function Dashboard() {
   const [connected, setConnected] = useState(false);
   const [ever, setEver] = useState(false);
@@ -128,7 +119,7 @@ export default function Dashboard() {
               <span className="text-sm hidden sm:inline">Back</span>
             </Link>
             <div className="flex items-center gap-2">
-              <Monitor className="w-4 h-4 text-dt-accent" />
+              <img src="/default.svg" alt="" className="w-4 h-4" />
               <span className="font-semibold text-sm tracking-tight">Dashtop</span>
             </div>
           </div>
@@ -143,7 +134,7 @@ export default function Dashboard() {
         <div className="glass rounded-3xl p-6 sm:p-8 border border-dt-border/40">
 
           <div className="mb-8">
-            <Section icon={<Monitor className="w-4 h-4" />} label="GPU" />
+            <div className="flex items-center gap-2 mb-4"><Monitor className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">GPU</h3></div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.gpuUtil} size={100} strokeWidth={6} label="Utilization" />
@@ -169,7 +160,7 @@ export default function Dashboard() {
           </div>
 
           <div className="mb-8">
-            <Section icon={<Cpu className="w-4 h-4" />} label="CPU" />
+            <div className="flex items-center gap-2 mb-4"><Cpu className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">CPU</h3></div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.cpuUtil} size={100} strokeWidth={6} label="Utilization" />
@@ -201,7 +192,7 @@ export default function Dashboard() {
 
           <div className="grid lg:grid-cols-2 gap-4 mb-8">
             <div className="glass-light rounded-2xl p-5">
-              <Section icon={<HardDrive className="w-4 h-4" />} label="Disk I/O" />
+              <div className="flex items-center gap-2 mb-4"><HardDrive className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Disk I/O</h3></div>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 {(["Read", "Write"] as const).map((label, i) => {
                   const v = i === 0 ? data.diskRead : data.diskWrite;
@@ -220,7 +211,7 @@ export default function Dashboard() {
               <MiniLineChart data={history.diskWrite} width={340} height={60} color="#A6A7A2" />
             </div>
             <div className="glass-light rounded-2xl p-5">
-              <Section icon={<Wifi className="w-4 h-4" />} label="Network" />
+              <div className="flex items-center gap-2 mb-4"><Wifi className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Network</h3></div>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 {(["Receive", "Send"] as const).map((label, i) => {
                   const v = i === 0 ? data.netRecv : data.netSend;
@@ -241,7 +232,7 @@ export default function Dashboard() {
           </div>
 
           <div>
-            <Section icon={<Thermometer className="w-4 h-4" />} label="Sensor Temperatures" />
+            <div className="flex items-center gap-2 mb-4"><Thermometer className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Sensor Temperatures</h3></div>
             {Object.keys(data.sensors).length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {Object.entries(data.sensors).map(([s, t]) => (
