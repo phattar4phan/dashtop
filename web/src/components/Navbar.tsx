@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Monitor } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV = [
-  { label: "Features", href: "#features" },
   { label: "Preview", href: "#dashboard" },
   { label: "Download", href: "#download" },
   { label: "FAQ", href: "#faq" },
@@ -39,7 +38,7 @@ export default function Navbar() {
           href="#"
           className="flex items-center gap-2.5 text-dt-text font-bold text-lg tracking-tight"
         >
-          <Monitor className="w-5 h-5 text-dt-accent" />
+          <img src="/default.svg" alt="" className="w-5 h-5" />
           <span>Dashtop</span>
         </a>
 

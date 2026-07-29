@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Download, BookOpen, ExternalLink, Check } from "lucide-react";
+import { Download, BookOpen, Check } from "lucide-react";
 
 const btnBase =
   "inline-flex items-center gap-2 px-6 py-3 glass rounded-xl text-sm font-medium text-dt-text hover:border-dt-accent/50 transition-colors";
@@ -24,7 +24,7 @@ export default function Hero() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-medium text-dt-accent mb-8"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-dt-accent animate-pulse-glow" />
-            Open Source &middot; Free Forever
+            Opened Source
           </motion.div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-dt-text leading-[1.05]">
@@ -80,11 +80,11 @@ export default function Hero() {
                 <div className="text-dt-muted/60 text-xs leading-relaxed">
                   <div className="flex items-center gap-2">
                     <Check className="w-3 h-3 text-dt-accent flex-shrink-0" />
-                    Downloading Dashtop v0.1.0...
+                    Cloning git repository...
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="w-3 h-3 text-dt-accent flex-shrink-0" />
-                    Installing to /usr/local/bin...
+                    Installing daemon...
                   </div>
                   <div className="flex items-center gap-2 text-dt-accent">
                     <Check className="w-3 h-3 flex-shrink-0" />
@@ -94,16 +94,6 @@ export default function Hero() {
               </div>
             </div>
 
-            <motion.a
-              href="https://dashtop.phattar4phan.workers.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.02 }}
-              className="mt-4 inline-flex items-center gap-1.5 text-sm text-dt-accent hover:text-dt-accent/80 transition-colors font-medium"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              View live demo at dashtop.phattar4phan.workers.app
-            </motion.a>
           </motion.div>
         </motion.div>
       </div>
