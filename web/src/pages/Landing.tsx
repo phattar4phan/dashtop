@@ -2,7 +2,6 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import DashboardPreview from "../components/DashboardPreview";
 import SupportedMetrics from "../components/SupportedMetrics";
-import Download from "../components/Download";
 import FAQ from "../components/FAQ";
 import Footer from "../components/Footer";
 
@@ -14,7 +13,6 @@ export default function Landing() {
         <Hero />
         <DashboardPreview />
         <SupportedMetrics />
-        <Download />
         <FAQ />
       </main>
       <Footer />
