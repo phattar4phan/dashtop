@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -11,11 +11,6 @@ import CircularProgress from "../components/CircularProgress";
 import MiniLineChart from "../components/MiniLineChart";
 
 const HISTORY = 30;
-function wsUrl() {
-  if (typeof window === "undefined") return "ws://127.0.0.1:8765";
-  const proto = window.location.protocol === "https:" ? "wss" : "ws";
-  return `${proto}://${window.location.hostname}:8765`;
-}
 
 type Data = {
   gpuUtil: number; vramUtil: number; vramUsed: number; vramTotal: number; gpuTemp: number;
@@ -39,6 +34,14 @@ const ZERO_DATA: Data = {
   cpuUtil: 0, cpuFreq: 0, perCore: [], cores: 0, threads: 0, cpuTemp: 0,
   diskRead: 0, diskWrite: 0, netRecv: 0, netSend: 0, sensors: {},
 };
+
+function apiUrl() {
+  if (typeof window === "undefined") return "/api/data";
+  const p = new URLSearchParams(window.location.search);
+  const q = p.get("api");
+  if (q) return q + "/api/data";
+  return "/api/data";
+}
 
 function mapLive(raw: Record<string, unknown>): Data {
   const sensors: Record<string, number> = {};
@@ -68,61 +71,47 @@ function histPush(prev: Hist, d: Data): Hist {
 
 const FMT_2D = { minimumFractionDigits: 2, maximumFractionDigits: 2 } as const;
 
-function Section({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="flex items-center gap-2 mb-4">
-      <span className="text-dt-accent">{icon}</span>
-      <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">{label}</h3>
-    </div>
-  );
-}
-
 export default function Dashboard() {
   const [connected, setConnected] = useState(false);
   const [ever, setEver] = useState(false);
   const [data, setData] = useState<Data>(ZERO_DATA);
   const [history, setHistory] = useState<Hist>(ZERO_HIST);
-  const pushRef = useRef<(d: Data) => void>(() => {});
-
-  pushRef.current = useCallback((d: Data) => {
-    setHistory((p) => histPush(p, d));
-  }, []);
 
   useEffect(() => {
-    let ws: WebSocket | null = null;
-    let retry: ReturnType<typeof setTimeout> | null = null;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let failCount = 0;
 
-    const connect = () => {
-      const s = new WebSocket(wsUrl());
-      ws = s;
-      s.onopen = () => { setConnected(true); setEver(true); };
-      s.onmessage = (e) => {
-        try {
-          const d = mapLive(JSON.parse(e.data));
-          setData(d);
-          pushRef.current(d);
-        } catch { /* skip */ }
-      };
-      s.onclose = () => { setConnected(false); ws = null; retry = setTimeout(connect, 3000); };
-      s.onerror = () => s.close();
+    const poll = async () => {
+      try {
+        const res = await fetch(apiUrl());
+        if (!res.ok) throw new Error("fail");
+        const raw = await res.json();
+        const d = mapLive(raw);
+        setData(d);
+        setHistory((p) => histPush(p, d));
+        setConnected(true);
+        setEver(true);
+        failCount = 0;
+      } catch {
+        failCount++;
+        if (failCount >= 3) setConnected(false);
+      }
     };
 
-    connect();
-    return () => {
-      if (ws) { ws.onclose = null; ws.close(); }
-      if (retry) clearTimeout(retry);
-    };
+    poll();
+    timer = setInterval(poll, 2000);
+    return () => { if (timer) clearInterval(timer); };
   }, []);
 
   const status = connected
-    ? <span className="flex items-center gap-1.5 text-[10px] text-dt-accent uppercase tracking-wider"><span className="w-1.5 h-1.5 rounded-full bg-dt-accent animate-pulse" />Live</span>
+    ? <span className="flex items-center gap-1.5 text-[10px] text-dt-accent uppercase tracking-wider"><span className="w-1.5 h-1.5 bg-dt-accent animate-pulse" />Live</span>
     : ever
-    ? <span className="flex items-center gap-1.5 text-[10px] text-yellow-500 uppercase tracking-wider"><WifiOff className="w-3 h-3" />Reconnecting</span>
+    ? <span className="flex items-center gap-1.5 text-[10px] text-dt-accent uppercase tracking-wider"><WifiOff className="w-3 h-3" />Reconnecting</span>
     : <span className="flex items-center gap-1.5 text-[10px] text-dt-muted uppercase tracking-wider"><Loader2 className="w-3 h-3 animate-spin" />Connecting</span>;
 
   return (
     <div className="min-h-screen bg-dt-bg text-dt-text font-sans">
-      <header className="glass border-b border-dt-border/30 sticky top-0 z-50">
+      <header className="bg-dt-bg border-b-2 border-dt-border sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-6 flex items-center justify-between h-14">
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center gap-1.5 text-dt-muted hover:text-dt-text transition-colors">
@@ -130,7 +119,7 @@ export default function Dashboard() {
               <span className="text-sm hidden sm:inline">Back</span>
             </Link>
             <div className="flex items-center gap-2">
-              <Monitor className="w-4 h-4 text-dt-accent" />
+              <img src="/default.svg" alt="" className="w-4 h-4" />
               <span className="font-semibold text-sm tracking-tight">Dashtop</span>
             </div>
           </div>
@@ -142,24 +131,24 @@ export default function Dashboard() {
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
         className="mx-auto max-w-7xl px-4 sm:px-6 py-6"
       >
-        <div className="glass rounded-3xl p-6 sm:p-8 border border-dt-border/40">
+        <div className="brutal-card p-6 sm:p-8">
 
           <div className="mb-8">
-            <Section icon={<Monitor className="w-4 h-4" />} label="GPU" />
+            <div className="flex items-center gap-2 mb-4"><Monitor className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">GPU</h3></div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.gpuUtil} size={100} strokeWidth={6} label="Utilization" />
                 <MiniLineChart data={history.gpu} width={160} height={40} className="mt-3" />
               </div>
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.vramUtil} size={100} strokeWidth={6} label="VRAM Utilization" />
                 <div className="mt-3 text-xs text-dt-muted">
                   <NumberFlow value={Number((data.vramUsed / 1024).toFixed(1))} /> /{" "}
                   {Number((data.vramTotal / 1024).toFixed(1))} GB
                 </div>
-                <div className="w-full mt-2 bg-dt-border/30 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full mt-2 bg-dt-border h-1.5 overflow-hidden">
                   <motion.div
-                    className="h-full bg-dt-accent rounded-full"
+                    className="h-full bg-dt-accent"
                     animate={{ width: `${data.vramUtil}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                   />
@@ -171,9 +160,9 @@ export default function Dashboard() {
           </div>
 
           <div className="mb-8">
-            <Section icon={<Cpu className="w-4 h-4" />} label="CPU" />
+            <div className="flex items-center gap-2 mb-4"><Cpu className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">CPU</h3></div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.cpuUtil} size={100} strokeWidth={6} label="Utilization" />
                 <MiniLineChart data={history.cpu} width={160} height={40} className="mt-3" />
               </div>
@@ -187,7 +176,7 @@ export default function Dashboard() {
             <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider mb-4">
               Per-Core Frequency (MHz)
             </h3>
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
                 {data.perCore.length > 0
                   ? data.perCore.map((f, i) => (
@@ -202,52 +191,48 @@ export default function Dashboard() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-4 mb-8">
-            <div className="glass-light rounded-2xl p-5">
-              <Section icon={<HardDrive className="w-4 h-4" />} label="Disk I/O" />
+            <div className="brutal-card-light p-5">
+              <div className="flex items-center gap-2 mb-4"><HardDrive className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Disk I/O</h3></div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Read</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.diskRead} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Write</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.diskWrite} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
+                {(["Read", "Write"] as const).map((label, i) => {
+                  const v = i === 0 ? data.diskRead : data.diskWrite;
+                  return (
+                    <div key={label}>
+                      <span className="text-[10px] text-dt-muted uppercase tracking-wider">{label}</span>
+                      <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
+                        <NumberFlow value={v} locales="en-US" format={FMT_2D} />
+                        <span className="text-xs text-dt-muted">MB/s</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               <MiniLineChart data={history.diskRead} width={340} height={60} />
-              <MiniLineChart data={history.diskWrite} width={340} height={60} color="#A6A7A2" />
+              <MiniLineChart data={history.diskWrite} width={340} height={60} color="#F4A300" />
             </div>
-            <div className="glass-light rounded-2xl p-5">
-              <Section icon={<Wifi className="w-4 h-4" />} label="Network" />
+            <div className="brutal-card-light p-5">
+              <div className="flex items-center gap-2 mb-4"><Wifi className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Network</h3></div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Receive</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.netRecv} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-dt-muted uppercase tracking-wider">Send</span>
-                  <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
-                    <NumberFlow value={data.netSend} locales="en-US" format={FMT_2D} />
-                    <span className="text-xs text-dt-muted">MB/s</span>
-                  </div>
-                </div>
+                {(["Receive", "Send"] as const).map((label, i) => {
+                  const v = i === 0 ? data.netRecv : data.netSend;
+                  return (
+                    <div key={label}>
+                      <span className="text-[10px] text-dt-muted uppercase tracking-wider">{label}</span>
+                      <div className="text-xl font-bold text-dt-text flex items-baseline gap-1">
+                        <NumberFlow value={v} locales="en-US" format={FMT_2D} />
+                        <span className="text-xs text-dt-muted">MB/s</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               <MiniLineChart data={history.netRecv} width={340} height={60} />
-              <MiniLineChart data={history.netSend} width={340} height={60} color="#A6A7A2" />
+              <MiniLineChart data={history.netSend} width={340} height={60} color="#F4A300" />
             </div>
           </div>
 
           <div>
-            <Section icon={<Thermometer className="w-4 h-4" />} label="Sensor Temperatures" />
+            <div className="flex items-center gap-2 mb-4"><Thermometer className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Sensor Temperatures</h3></div>
             {Object.keys(data.sensors).length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {Object.entries(data.sensors).map(([s, t]) => (
@@ -255,7 +240,7 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <div className="glass-light rounded-2xl p-6 text-center text-xs text-dt-muted">No sensor data available</div>
+              <div className="brutal-card-light p-6 text-center text-xs text-dt-muted">No sensor data available</div>
             )}
           </div>
         </div>

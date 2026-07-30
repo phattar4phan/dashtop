@@ -1,4 +1,4 @@
-import { Monitor, Github, BookOpen, Download, ExternalLink } from "lucide-react";
+import { Github, BookOpen, Download } from "lucide-react";
 
 const LINKS = [
   {
@@ -6,7 +6,6 @@ const LINKS = [
     items: [
       { label: "Download", href: "#download", icon: <Download className="w-3.5 h-3.5" /> },
       { label: "Documentation", href: "https://github.com/phattar4phan/dashtop/blob/main/README.md", icon: <BookOpen className="w-3.5 h-3.5" /> },
-      { label: "Demo Dashboard", href: "https://dashtop.phattar4phan.workers.app", icon: <ExternalLink className="w-3.5 h-3.5" /> },
     ],
   },
   {
@@ -19,12 +18,12 @@ const LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-dt-border/30">
+    <footer className="border-t-2 border-dt-border">
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <Monitor className="w-5 h-5 text-dt-accent" />
+              <img src="/default.svg" alt="" className="w-6 h-6" />
               <span className="font-bold text-dt-text text-lg">Dashtop</span>
             </div>
             <p className="text-sm text-dt-muted leading-relaxed max-w-xs">
@@ -41,9 +40,9 @@ export default function Footer() {
                       href={l.href}
                       target={l.href.startsWith("http") ? "_blank" : undefined}
                       rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="inline-flex items-center gap-2 text-sm text-dt-muted hover:text-dt-text transition-colors"
+                      className="inline-flex items-center gap-2 text-sm text-dt-muted hover:text-dt-text transition-colors font-bold"
                     >
-                      <span className="text-dt-accent/70">{l.icon}</span>
+                      <span className="text-dt-accent">{l.icon}</span>
                       {l.label}
                     </a>
                   </li>
@@ -52,14 +51,14 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 pt-8 border-t border-dt-border/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-dt-muted/60">
+        <div className="mt-12 pt-8 border-t-2 border-dt-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-dt-muted">
             &copy; {new Date().getFullYear()} Dashtop. Open source under the MIT License.
           </p>
           <div className="flex items-center gap-4">
-            <a href="https://github.com/phattar4phan/dashtop" target="_blank" rel="noopener noreferrer" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">GitHub</a>
-            <a href="https://github.com/phattar4phan/dashtop/blob/main/README.md" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Documentation</a>
-            <a href="#download" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Download</a>
+            <a href="https://github.com/phattar4phan/dashtop" target="_blank" rel="noopener noreferrer" className="text-xs text-dt-muted hover:text-dt-text transition-colors font-bold">GitHub</a>
+            <a href="https://github.com/phattar4phan/dashtop/blob/main/README.md" className="text-xs text-dt-muted hover:text-dt-text transition-colors font-bold">Documentation</a>
+            <a href="#download" className="text-xs text-dt-muted hover:text-dt-text transition-colors font-bold">Download</a>
           </div>
         </div>
       </div>

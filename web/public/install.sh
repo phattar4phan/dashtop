@@ -31,20 +31,9 @@ else
 fi
 
 echo
-echo "Host this app locally or remotely?"
-echo "  1) localhost"
-echo "  2) remote"
-read -rp "Choose [1]: " mode
-mode="${mode:-1}"
-
-if [ "$mode" = "2" ]; then
-    read -rp "URL/IP to bind: " HOST
-    read -rp "Port: " PORT
-else
-    read -rp "Port [5173]: " PORT
-    PORT="${PORT:-5173}"
-    HOST="127.0.0.1"
-fi
+read -rp "Port [8765]: " PORT </dev/tty
+PORT="${PORT:-8765}"
+HOST="127.0.0.1"
 
 DASHTOP_DIR="$HOME/.dashtop"
 mkdir -p "$DASHTOP_DIR"
@@ -56,23 +45,14 @@ cat > "$DASHTOP_DIR/settings.json" <<EOF
 }
 EOF
 
-if [ "$HOST" = "127.0.0.1" ] || [ "$HOST" = "localhost" ]; then
-    if [ ! -d web/node_modules ]; then
-        echo "Installing web dependencies..."
-        (cd web && npm install --silent)
-    fi
-    echo "Building web dashboard..."
-    (cd web && npm run build --silent)
-    rm -rf "$DASHTOP_DIR/dist"
-    cp -r web/dist "$DASHTOP_DIR/dist"
-    cat > "$DASHTOP_DIR/dist/package.json" <<PKG
-{
-    "scripts": {
-        "dev": "npx vite preview --port $PORT --host"
-    }
-}
-PKG
+if [ ! -d web/node_modules ]; then
+    echo "Installing web dependencies..."
+    (cd web && npm install --silent)
 fi
+echo "Building web dashboard..."
+(cd web && npm run build --silent)
+rm -rf "$DASHTOP_DIR/dist"
+cp -r web/dist "$DASHTOP_DIR/dist"
 
 echo "Installing systemd user service..."
 SERVICE_DIR="$HOME/.config/systemd/user"
@@ -87,7 +67,23 @@ systemctl --user enable --now dashtop
 loginctl enable-linger "$USER" 2>/dev/null || true
 
 echo
+echo "Waiting for daemon..."
+sleep 8
+TUNNEL=$(cat "$DASHTOP_DIR/tunnel_url" 2>/dev/null || true)
+
+cat > "$DASHTOP_DIR/url.sh" <<'EOF'
+#!/usr/bin/env bash
+cat "$HOME/.dashtop/tunnel_url" 2>/dev/null || echo "No tunnel. Run: systemctl --user restart dashtop"
+EOF
+chmod +x "$DASHTOP_DIR/url.sh"
+
+echo
 echo -e "${GREEN}Done.${NC}"
 echo "Config: $DASHTOP_DIR/settings.json"
 echo "Status: systemctl --user status dashtop"
-echo "Run: cd $DASHTOP_DIR/dist && npm run dev"
+if [ -n "$TUNNEL" ]; then
+    echo "Remote:  $TUNNEL"
+else
+    echo "Local:   http://$HOST:$PORT/dashboard"
+fi
+echo "Get URL: ~/.dashtop/url.sh"

@@ -13,7 +13,7 @@ Real-time hardware monitoring dashboard for the modern web.
 ## Install
 
 ```bash
-curl -fsSL https://dashtop.phattar4phan.workers.app/install.sh | sh
+curl -fsSL https://dashtop.phattar4phan.workers.dev/install.sh | sh
 ```
 
 Installer prompts for localhost or remote host, installs Python + web deps, builds dashboard, creates systemd service.
@@ -22,8 +22,9 @@ If could not resolve or install via cURL, run these commands in order:
 ```bash
 git clone https://github.com/phattar4phan/dashtop
 cd dashtop
-bash ./web/public/install.sh
+bash ./install.sh
 systemctl --user status dashtop
+systemctl --user restart dashtop
 ```
 
 Then answer the prompt and then:
@@ -43,6 +44,15 @@ cd ~/.dashtop/dist && npm run dev
 
 Open `http://localhost:{PORT}/dashboard`.
 
+## Get URL
+To get the URL after daemon restart or whatever caused it to restart, run:
+```bash
+cd
+bash ~/.dashtop/install.sh
+```
+
+Go to the tunnel URL while also remove /dashboard, after reaching it. edit the URL and add /dashboard again.
+
 ## Stack
 
 - **Backend** — Python, psutil, WebSockets
@@ -51,7 +61,7 @@ Open `http://localhost:{PORT}/dashboard`.
 
 ## Config (localhost)
 
-`~/.dashtop/settings.json`:
+`~/.dashtop/settings.json (example)`:
 ```json
 {
     "HOST": "127.0.0.1",

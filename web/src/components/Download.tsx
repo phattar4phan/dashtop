@@ -13,10 +13,10 @@ const Btn = ({ href, children, primary }: { href: string; children: React.ReactN
     rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.97 }}
-    className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-colors ${
+    className={`inline-flex items-center gap-2 px-6 py-3 text-sm font-bold border-2 border-dt-border transition-colors ${
       primary
-        ? "bg-dt-accent text-black font-semibold hover:bg-dt-accent/90 accent-glow"
-        : "glass text-dt-text hover:border-dt-accent/50"
+        ? "bg-dt-accent text-dt-accent-text hover:bg-dt-accent/90"
+        : "text-dt-text hover:bg-dt-surface"
     }`}
   >
     {children}
@@ -43,21 +43,21 @@ export default function Download() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6 }}
-          className="glass rounded-3xl p-6 sm:p-8 border border-dt-border/40 max-w-2xl mx-auto"
+          className="brutal-card p-6 sm:p-8 max-w-2xl mx-auto"
         >
-          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-dt-border/30">
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b-2 border-dt-border">
             <Terminal className="w-4 h-4 text-dt-accent" />
             <span className="text-sm font-semibold text-dt-text">Linux</span>
           </div>
 
           <div className="space-y-3">
             {CMDS.map((c) => (
-              <div key={c.label} className="glass-light rounded-xl p-4 font-mono text-xs sm:text-sm">
+              <div key={c.label} className="brutal-card-light p-4 font-mono text-xs sm:text-sm">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] text-dt-muted uppercase tracking-wider">{c.label}</span>
                   <button
                     onClick={() => navigator.clipboard.writeText(c.cmd)}
-                    className="text-[10px] text-dt-accent hover:text-dt-accent/80 transition-colors uppercase tracking-wider"
+                    className="text-[10px] text-dt-accent hover:text-dt-accent/80 transition-colors uppercase tracking-wider font-bold"
                   >
                     Copy
                   </button>
