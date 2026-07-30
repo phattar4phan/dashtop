@@ -14,7 +14,7 @@ export default function MiniLineChart({
   data,
   width = 200,
   height = 60,
-  color = "#00ACAC",
+  color = "#dd700b",
   showGrid = true,
   className = "",
 }: Props) {
@@ -58,13 +58,13 @@ export default function MiniLineChart({
             y1={height - height * p}
             x2={width}
             y2={height - height * p}
-            stroke="rgba(70, 69, 69, 0.3)"
+            stroke="#adaca7"
             strokeWidth={0.5}
           />
         ))}
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity={0.2} />
+          <stop offset="0%" stopColor={color} stopOpacity={0.15} />
           <stop offset="100%" stopColor={color} stopOpacity={0} />
         </linearGradient>
       </defs>
@@ -81,8 +81,8 @@ export default function MiniLineChart({
             d={smoothPath}
             fill="none"
             stroke={color}
-            strokeWidth={1.5}
-            strokeLinecap="round"
+            strokeWidth={2}
+            strokeLinecap="butt"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}

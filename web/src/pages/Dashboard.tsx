@@ -104,14 +104,14 @@ export default function Dashboard() {
   }, []);
 
   const status = connected
-    ? <span className="flex items-center gap-1.5 text-[10px] text-dt-accent uppercase tracking-wider"><span className="w-1.5 h-1.5 rounded-full bg-dt-accent animate-pulse" />Live</span>
+    ? <span className="flex items-center gap-1.5 text-[10px] text-dt-accent uppercase tracking-wider"><span className="w-1.5 h-1.5 bg-dt-accent animate-pulse" />Live</span>
     : ever
-    ? <span className="flex items-center gap-1.5 text-[10px] text-yellow-500 uppercase tracking-wider"><WifiOff className="w-3 h-3" />Reconnecting</span>
+    ? <span className="flex items-center gap-1.5 text-[10px] text-dt-accent uppercase tracking-wider"><WifiOff className="w-3 h-3" />Reconnecting</span>
     : <span className="flex items-center gap-1.5 text-[10px] text-dt-muted uppercase tracking-wider"><Loader2 className="w-3 h-3 animate-spin" />Connecting</span>;
 
   return (
     <div className="min-h-screen bg-dt-bg text-dt-text font-sans">
-      <header className="glass border-b border-dt-border/30 sticky top-0 z-50">
+      <header className="bg-dt-bg border-b-2 border-dt-border sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-6 flex items-center justify-between h-14">
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center gap-1.5 text-dt-muted hover:text-dt-text transition-colors">
@@ -131,24 +131,24 @@ export default function Dashboard() {
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
         className="mx-auto max-w-7xl px-4 sm:px-6 py-6"
       >
-        <div className="glass rounded-3xl p-6 sm:p-8 border border-dt-border/40">
+        <div className="brutal-card p-6 sm:p-8">
 
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4"><Monitor className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">GPU</h3></div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.gpuUtil} size={100} strokeWidth={6} label="Utilization" />
                 <MiniLineChart data={history.gpu} width={160} height={40} className="mt-3" />
               </div>
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.vramUtil} size={100} strokeWidth={6} label="VRAM Utilization" />
                 <div className="mt-3 text-xs text-dt-muted">
                   <NumberFlow value={Number((data.vramUsed / 1024).toFixed(1))} /> /{" "}
                   {Number((data.vramTotal / 1024).toFixed(1))} GB
                 </div>
-                <div className="w-full mt-2 bg-dt-border/30 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full mt-2 bg-dt-border h-1.5 overflow-hidden">
                   <motion.div
-                    className="h-full bg-dt-accent rounded-full"
+                    className="h-full bg-dt-accent"
                     animate={{ width: `${data.vramUtil}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                   />
@@ -162,7 +162,7 @@ export default function Dashboard() {
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4"><Cpu className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">CPU</h3></div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.cpuUtil} size={100} strokeWidth={6} label="Utilization" />
                 <MiniLineChart data={history.cpu} width={160} height={40} className="mt-3" />
               </div>
@@ -176,7 +176,7 @@ export default function Dashboard() {
             <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider mb-4">
               Per-Core Frequency (MHz)
             </h3>
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
                 {data.perCore.length > 0
                   ? data.perCore.map((f, i) => (
@@ -191,7 +191,7 @@ export default function Dashboard() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-4 mb-8">
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="flex items-center gap-2 mb-4"><HardDrive className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Disk I/O</h3></div>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 {(["Read", "Write"] as const).map((label, i) => {
@@ -208,9 +208,9 @@ export default function Dashboard() {
                 })}
               </div>
               <MiniLineChart data={history.diskRead} width={340} height={60} />
-              <MiniLineChart data={history.diskWrite} width={340} height={60} color="#A6A7A2" />
+              <MiniLineChart data={history.diskWrite} width={340} height={60} color="#F4A300" />
             </div>
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="flex items-center gap-2 mb-4"><Wifi className="w-4 h-4 text-dt-accent" /><h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Network</h3></div>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 {(["Receive", "Send"] as const).map((label, i) => {
@@ -227,7 +227,7 @@ export default function Dashboard() {
                 })}
               </div>
               <MiniLineChart data={history.netRecv} width={340} height={60} />
-              <MiniLineChart data={history.netSend} width={340} height={60} color="#A6A7A2" />
+              <MiniLineChart data={history.netSend} width={340} height={60} color="#F4A300" />
             </div>
           </div>
 
@@ -240,7 +240,7 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <div className="glass-light rounded-2xl p-6 text-center text-xs text-dt-muted">No sensor data available</div>
+              <div className="brutal-card-light p-6 text-center text-xs text-dt-muted">No sensor data available</div>
             )}
           </div>
         </div>

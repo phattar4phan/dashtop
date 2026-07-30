@@ -109,7 +109,7 @@ export default function DashboardPreview() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className="glass rounded-3xl p-6 sm:p-8 border border-dt-border/40"
+          className="brutal-card p-6 sm:p-8"
         >
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
@@ -117,18 +117,18 @@ export default function DashboardPreview() {
               <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">GPU</h3>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.gpuUtil} size={100} strokeWidth={6} label="Utilization" />
                 <MiniLineChart data={hist.gpu} width={160} height={40} className="mt-3" />
               </div>
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.vramUtil} size={100} strokeWidth={6} label="VRAM Utilization" />
                 <div className="mt-3 text-xs text-dt-muted">
                   <NumberFlow value={vGB(data.vramUsed)} /> / {vGB(data.vramTotal)} GB
                 </div>
-                <div className="w-full mt-2 bg-dt-border/30 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full mt-2 bg-dt-border h-1.5 overflow-hidden">
                   <motion.div
-                    className="h-full bg-dt-accent rounded-full"
+                    className="h-full bg-dt-accent"
                     animate={{ width: `${data.vramUtil}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                   />
@@ -145,7 +145,7 @@ export default function DashboardPreview() {
               <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">CPU</h3>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="glass-light rounded-2xl p-5 flex flex-col items-center">
+              <div className="brutal-card-light p-5 flex flex-col items-center">
                 <CircularProgress percentage={data.cpuUtil} size={100} strokeWidth={6} label="Utilization" />
                 <MiniLineChart data={hist.cpu} width={160} height={40} className="mt-3" />
               </div>
@@ -157,7 +157,7 @@ export default function DashboardPreview() {
 
           <div className="mb-8">
             <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider mb-4">Per-Core Frequency (MHz)</h3>
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
                 {data.perCore.map((f, i) => (
                   <div key={i} className="flex flex-col items-center gap-1 py-2">
@@ -170,7 +170,7 @@ export default function DashboardPreview() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-4 mb-8">
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="flex items-center gap-2 mb-4">
                 <HardDrive className="w-4 h-4 text-dt-accent" />
                 <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Disk I/O</h3>
@@ -190,9 +190,9 @@ export default function DashboardPreview() {
                 })}
               </div>
               <MiniLineChart data={hist.diskRead} width={340} height={60} />
-              <MiniLineChart data={hist.diskWrite} width={340} height={60} color="#A6A7A2" />
+              <MiniLineChart data={hist.diskWrite} width={340} height={60} color="#F4A300" />
             </div>
-            <div className="glass-light rounded-2xl p-5">
+            <div className="brutal-card-light p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Wifi className="w-4 h-4 text-dt-accent" />
                 <h3 className="text-sm font-semibold text-dt-muted uppercase tracking-wider">Network</h3>
@@ -212,7 +212,7 @@ export default function DashboardPreview() {
                 })}
               </div>
               <MiniLineChart data={hist.netRecv} width={340} height={60} />
-              <MiniLineChart data={hist.netSend} width={340} height={60} color="#A6A7A2" />
+              <MiniLineChart data={hist.netSend} width={340} height={60} color="#F4A300" />
             </div>
           </div>
 
@@ -238,7 +238,7 @@ export default function DashboardPreview() {
         >
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-dt-accent text-black font-semibold rounded-xl text-sm hover:bg-dt-accent/90 transition-colors accent-glow"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-dt-accent text-dt-accent-text font-bold border-2 border-dt-border text-sm hover:bg-dt-accent/90 transition-colors"
           >
             <ExternalLink className="w-4 h-4" />
             Open Dashboard

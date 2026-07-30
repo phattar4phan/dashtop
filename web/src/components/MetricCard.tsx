@@ -20,7 +20,7 @@ export default function MetricCard({
 }: Props) {
   return (
     <motion.div
-      className={`glass rounded-2xl p-5 flex flex-col gap-3 ${className}`}
+      className={`brutal-card p-5 flex flex-col gap-3 ${className}`}
       whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >

@@ -18,7 +18,7 @@ const LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-dt-border/30">
+    <footer className="border-t-2 border-dt-border">
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <div>
@@ -40,9 +40,9 @@ export default function Footer() {
                       href={l.href}
                       target={l.href.startsWith("http") ? "_blank" : undefined}
                       rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="inline-flex items-center gap-2 text-sm text-dt-muted hover:text-dt-text transition-colors"
+                      className="inline-flex items-center gap-2 text-sm text-dt-muted hover:text-dt-text transition-colors font-bold"
                     >
-                      <span className="text-dt-accent/70">{l.icon}</span>
+                      <span className="text-dt-accent">{l.icon}</span>
                       {l.label}
                     </a>
                   </li>
@@ -51,14 +51,14 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 pt-8 border-t border-dt-border/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-dt-muted/60">
+        <div className="mt-12 pt-8 border-t-2 border-dt-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-dt-muted">
             &copy; {new Date().getFullYear()} Dashtop. Open source under the MIT License.
           </p>
           <div className="flex items-center gap-4">
-            <a href="https://github.com/phattar4phan/dashtop" target="_blank" rel="noopener noreferrer" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">GitHub</a>
-            <a href="https://github.com/phattar4phan/dashtop/blob/main/README.md" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Documentation</a>
-            <a href="#download" className="text-xs text-dt-muted/60 hover:text-dt-muted transition-colors">Download</a>
+            <a href="https://github.com/phattar4phan/dashtop" target="_blank" rel="noopener noreferrer" className="text-xs text-dt-muted hover:text-dt-text transition-colors font-bold">GitHub</a>
+            <a href="https://github.com/phattar4phan/dashtop/blob/main/README.md" className="text-xs text-dt-muted hover:text-dt-text transition-colors font-bold">Documentation</a>
+            <a href="#download" className="text-xs text-dt-muted hover:text-dt-text transition-colors font-bold">Download</a>
           </div>
         </div>
       </div>
