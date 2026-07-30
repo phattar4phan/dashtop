@@ -1,15 +1,20 @@
 import { motion } from "framer-motion";
-import { Download, BookOpen, Check } from "lucide-react";
+import { Download, BookOpen, Github, Terminal } from "lucide-react";
+
+const CMDS = [
+  { label: "curl", cmd: "curl -fsSL https://dashtop.phattar4phan.workers.dev/install.sh | sh" },
+  { label: "wget", cmd: "wget -qO- https://dashtop.phattar4phan.workers.dev/install.sh | sh" },
+];
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section id="download" className="relative min-h-screen flex items-center justify-center pt-16">
       <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:py-32 lg:py-40">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="text-center max-w-3xl mx-auto"
+          className="max-w-2xl mx-auto"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -29,13 +34,13 @@ export default function Hero() {
             A modern web dashboard for real-time hardware monitoring.
           </p>
 
-          <p className="mt-4 text-base text-dt-muted max-w-xl mx-auto leading-relaxed">
+          <p className="mt-4 text-base text-dt-muted leading-relaxed">
             Dashtop provides a fast, lightweight, browser-based interface for
             monitoring essential hardware metrics without the complexity of
             traditional monitoring suites.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center gap-3">
             <motion.a
               href="#download"
               whileHover={{ scale: 1.03 }}
@@ -44,6 +49,17 @@ export default function Hero() {
             >
               <Download className="w-4 h-4" />
               Download
+            </motion.a>
+            <motion.a
+              href="https://github.com/phattar4phan/dashtop"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-dt-border text-dt-text font-bold text-sm hover:bg-dt-surface transition-colors"
+            >
+              <Github className="w-4 h-4" />
+              GitHub
             </motion.a>
             <motion.a
               href="https://github.com/phattar4phan/dashtop/blob/main/README.md"
@@ -60,37 +76,28 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="mt-12 max-w-lg mx-auto"
+            className="mt-12"
           >
-            <div className="brutal-card p-4 font-mono text-xs sm:text-sm text-left overflow-x-auto">
-              <div className="flex items-center gap-2 mb-3 pb-3 border-b-2 border-dt-border">
-                <span className="w-2.5 h-2.5 bg-red-500/80" />
-                <span className="w-2.5 h-2.5 bg-yellow-500/80" />
-                <span className="w-2.5 h-2.5 bg-green-500/80" />
-                <span className="ml-2 text-dt-muted text-[10px]">Terminal</span>
-              </div>
-              <div className="space-y-1.5">
-                <div>
-                  <span className="text-dt-accent font-bold">$ </span>
-                  <span className="text-dt-text">
-                    curl -fsSL https://dashtop.phattar4phan.workers.dev/install.sh | sh
-                  </span>
+            <div className="flex items-center gap-2 mb-3">
+              <Terminal className="w-4 h-4 text-dt-accent" />
+              <span className="text-sm font-semibold text-dt-text">Linux</span>
+            </div>
+
+            <div className="space-y-3">
+              {CMDS.map((c) => (
+                <div key={c.label} className="brutal-card p-4 font-mono text-xs sm:text-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] text-dt-muted uppercase tracking-wider">{c.label}</span>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(c.cmd)}
+                      className="text-[10px] text-dt-accent hover:text-dt-accent/80 transition-colors uppercase tracking-wider font-bold"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <code className="text-dt-text break-all">{c.cmd}</code>
                 </div>
-                <div className="text-dt-muted text-xs leading-relaxed">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3 h-3 text-dt-accent flex-shrink-0" />
-                    Cloning git repository...
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3 h-3 text-dt-accent flex-shrink-0" />
-                    Installing daemon...
-                  </div>
-                  <div className="flex items-center gap-2 text-dt-accent font-bold">
-                    <Check className="w-3 h-3 flex-shrink-0" />
-                    Dashtop installed successfully!
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </motion.div>
         </motion.div>
