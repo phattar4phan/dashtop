@@ -20,9 +20,9 @@ export default function Navbar() {
   }, []);
 
   const linkClass =
-    "px-3 py-2 text-sm text-dt-muted hover:text-dt-text transition-colors rounded-lg hover:bg-dt-border/20";
+    "px-3 py-2 text-sm font-bold text-dt-text hover:text-dt-accent transition-colors";
   const mobileLinkClass =
-    "py-2 text-sm text-dt-muted hover:text-dt-text transition-colors";
+    "py-2 text-sm font-bold text-dt-text hover:text-dt-accent transition-colors";
 
   return (
     <motion.nav
@@ -30,7 +30,7 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass border-b border-dt-border/30" : "bg-transparent"
+        scrolled ? "bg-dt-bg border-b-2 border-dt-border" : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 flex items-center justify-between h-16">
@@ -51,20 +51,20 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link to="/dashboard" className="text-sm text-dt-muted hover:text-dt-text transition-colors">
+          <Link to="/dashboard" className="text-sm font-bold text-dt-text hover:text-dt-accent transition-colors">
             Dashboard
           </Link>
           <a
             href="https://github.com/phattar4phan/dashtop"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-dt-muted hover:text-dt-text transition-colors"
+            className="text-sm font-bold text-dt-text hover:text-dt-accent transition-colors"
           >
             GitHub
           </a>
           <a
             href="#download"
-            className="px-4 py-2 text-sm font-medium bg-dt-accent text-black rounded-lg hover:bg-dt-accent/90 transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-dt-accent text-dt-accent-text border-2 border-dt-border hover:bg-dt-accent/90 transition-colors"
           >
             Download
           </a>
@@ -72,7 +72,7 @@ export default function Navbar() {
 
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-dt-muted hover:text-dt-text transition-colors"
+          className="md:hidden p-2 text-dt-text hover:text-dt-accent transition-colors"
           aria-label="Toggle menu"
         >
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -85,7 +85,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-dt-border/30 overflow-hidden"
+            className="md:hidden border-t-2 border-dt-border bg-dt-bg overflow-hidden"
           >
             <div className="px-6 py-4 flex flex-col gap-2">
               {NAV.map((l) => (
@@ -116,7 +116,7 @@ export default function Navbar() {
               <a
                 href="#download"
                 onClick={() => setOpen(false)}
-                className="mt-2 px-4 py-2 text-sm font-medium bg-dt-accent text-black rounded-lg text-center hover:bg-dt-accent/90 transition-colors"
+                className="mt-2 px-4 py-2 text-sm font-bold bg-dt-accent text-dt-accent-text border-2 border-dt-border text-center hover:bg-dt-accent/90 transition-colors"
               >
                 Download
               </a>

@@ -48,7 +48,7 @@ export default function SupportedMetrics() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.4, delay: i * 0.08 }}
-              className={`rounded-2xl p-5 ${i % 2 === 0 ? "glass" : "bg-dt-border/10"}`}
+              className={`p-5 border-2 border-dt-border ${i % 2 === 0 ? "bg-dt-surface" : "bg-dt-bg"}`}
             >
               <div className="flex items-center gap-2.5 mb-4">
                 <span className="text-dt-accent">{c.icon}</span>

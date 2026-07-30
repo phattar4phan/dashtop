@@ -34,21 +34,20 @@ export default function CircularProgress({
           <circle
             cx={cx} cy={cx} r={r}
             fill="none"
-            stroke="rgba(70, 69, 69, 0.4)"
+            stroke="#adaca7"
             strokeWidth={strokeWidth}
           />
           <motion.circle
             cx={cx} cy={cx} r={r}
             fill="none"
-            stroke="#00ACAC"
+            stroke="#FF6F61"
             strokeWidth={strokeWidth}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             strokeDasharray={circ}
             animate={{
               strokeDashoffset: circ - (pct / 100) * circ,
             }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ filter: "drop-shadow(0 0 6px rgba(0, 172, 172, 0.4))" }}
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">

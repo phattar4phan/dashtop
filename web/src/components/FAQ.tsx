@@ -47,10 +47,10 @@ export default function FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6 }}
-          className="max-w-2xl mx-auto space-y-3"
+          className="max-w-2xl mx-auto space-y-0"
         >
           {FAQS.map((faq, i) => (
-            <div key={i} className="glass rounded-2xl overflow-hidden border border-dt-border/30">
+            <div key={i} className="border-2 border-dt-border bg-dt-surface overflow-hidden [&:not(:first-child)]:border-t-0">
               <button
                 onClick={() => setOpen(open === i ? null : i)}
                 className="w-full flex items-center justify-between p-5 text-left"
@@ -73,7 +73,7 @@ export default function FAQ() {
                     transition={{ duration: 0.25 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 pb-5 text-sm text-dt-muted leading-relaxed border-t border-dt-border/20 pt-4">
+                    <div className="px-5 pb-5 text-sm text-dt-muted leading-relaxed border-t-2 border-dt-border pt-4">
                       {faq.a}
                     </div>
                   </motion.div>

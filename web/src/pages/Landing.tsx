@@ -10,7 +10,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-dt-bg text-dt-text font-sans">
       <Navbar />
-      <main className="[&>*]:border-t [&>*]:border-dt-border/30 [&>*:first-child]:border-t-0">
+      <main className="[&>*]:border-t-2 [&>*]:border-dt-border [&>*:first-child]:border-t-0">
         <Hero />
         <DashboardPreview />
         <SupportedMetrics />
